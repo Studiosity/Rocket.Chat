@@ -425,7 +425,7 @@ export class CsvImporter extends Base {
 
 				if (creator && targetUser) {
 					if (!rid) {
-						const roomInfo = Meteor.runAsUser(creator._id, () => Meteor.call('createDirectMessage', targetUser.username));
+						const roomInfo = Meteor.runAsUser(creator._id, () => Meteor.call('createDirectMessage', [targetUser.username]));
 						rid = roomInfo.rid;
 						room = Rooms.findOneById(rid, { fields: { usernames: 1, t: 1, name: 1 } });
 					}

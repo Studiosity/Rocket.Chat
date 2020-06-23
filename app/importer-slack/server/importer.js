@@ -709,7 +709,7 @@ export class SlackImporter extends Base {
 						return;
 					}
 
-					const roomInfo = Meteor.runAsUser(user1._id, () => Meteor.call('createDirectMessage', user2.username));
+					const roomInfo = Meteor.runAsUser(user1._id, () => Meteor.call('createDirectMessage', [user2.username]));
 					channel.rocketId = roomInfo.rid;
 					Rooms.update({ _id: channel.rocketId }, { $addToSet: { importIds: channel.id } });
 				}

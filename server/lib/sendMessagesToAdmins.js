@@ -13,7 +13,7 @@ export function sendMessagesToAdmins({
 	Roles.findUsersInRole('admin').forEach((adminUser) => {
 		if (fromUser) {
 			try {
-				Meteor.runAsUser(fromId, () => Meteor.call('createDirectMessage', adminUser.username));
+				Meteor.runAsUser(fromId, () => Meteor.call('createDirectMessage', [adminUser.username]));
 
 				const rid = [adminUser._id, fromId].sort().join('');
 

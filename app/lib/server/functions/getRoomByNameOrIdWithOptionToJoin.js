@@ -39,7 +39,7 @@ export const getRoomByNameOrIdWithOptionToJoin = function _getRoomByNameOrIdWith
 			}
 
 			room = Meteor.runAsUser(currentUserId, function() {
-				const { rid } = Meteor.call('createDirectMessage', roomUser.username);
+				const { rid } = Meteor.call('createDirectMessage', [roomUser.username]);
 				return Rooms.findOneById(rid);
 			});
 		}

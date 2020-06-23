@@ -1222,7 +1222,7 @@ export class HipChatEnterpriseImporter extends Base {
 				if (!room) {
 					this.logger.debug('DM room not found, creating it.');
 					Meteor.runAsUser(sender._id, () => {
-						const roomInfo = Meteor.call('createDirectMessage', receiver.username);
+						const roomInfo = Meteor.call('createDirectMessage', [receiver.username]);
 
 						room = Rooms.findOneById(roomInfo.rid);
 						roomObjects[roomId] = room;

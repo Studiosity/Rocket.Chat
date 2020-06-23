@@ -73,7 +73,7 @@ const openProfileTab = (e, instance, username) => {
 
 const openProfileTabOrOpenDM = (e, instance, username) => {
 	if (settings.get('UI_Click_Direct_Message')) {
-		Meteor.call('createDirectMessage', username, (error, result) => {
+		Meteor.call('createDirectMessage', [username], (error, result) => {
 			if (error) {
 				if (error.isClientSafe) {
 					openProfileTab(e, instance, username);

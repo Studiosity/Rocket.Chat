@@ -138,6 +138,7 @@ export function getEmailData({ message, user, subscription, room, emailAddress, 
 		data: {
 			room_path,
 		},
+		headers: {},
 	};
 
 	email.from = `${ String(username).replace(/@/g, '%40').replace(/[<>,]/g, '') } <${ settings.get('From_Email') }>`;

@@ -1,5 +1,5 @@
 import { Meteor } from 'meteor/meteor';
-import { check } from 'meteor/check';
+import { check, Match } from 'meteor/check';
 
 import { settings } from '../../app/settings';
 import { hasPermission } from '../../app/authorization';
@@ -9,8 +9,9 @@ import { addUser } from '../../app/federation/server/functions/addUser';
 import { createRoom } from '../../app/lib/server';
 
 Meteor.methods({
-	createDirectMessage(...usernames) {
+	createDirectMessage(usernames, excludeSelf) {
 		check(usernames, [String]);
+		check(excludeSelf, Match.Optional(Boolean));
 
 		if (!Meteor.userId()) {
 			throw new Meteor.Error('error-invalid-user', 'Invalid user', {
@@ -48,12 +49,20 @@ Meteor.methods({
 			return to;
 		});
 
+		const roomUsers = excludeSelf ? users : [me, ...users];
+
+		if (roomUsers.length === 1) {
+			throw new Meteor.Error('error-invalid-user', 'Invalid user', {
+				method: 'createDirectMessage',
+			});
+		}
+
 		if (!hasPermission(Meteor.userId(), 'create-d')) {
 			// If the user can't create DMs but can access already existing ones
 			if (hasPermission(Meteor.userId(), 'view-d-room')) {
 				// Check if the direct room already exists, then return it
 
-				const uids = [me, ...users].map(({ _id }) => _id).sort();
+				const uids = roomUsers.map(({ _id }) => _id).sort();
 				const room = Rooms.findOneDirectRoomContainingAllUserIDs(uids, { fields: { _id: 1 } });
 				if (room) {
 					return {
@@ -69,7 +78,7 @@ Meteor.methods({
 			});
 		}
 
-		const { _id: rid, inserted, ...room } = createRoom('d', null, null, [me, ...users], null, { }, { creator: me._id });
+		const { _id: rid, inserted, ...room } = createRoom('d', null, null, roomUsers, null, { }, { creator: me._id });
 
 		return {
 			t: 'd',

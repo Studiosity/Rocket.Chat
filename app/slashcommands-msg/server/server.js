@@ -42,7 +42,7 @@ function Msg(command, params, item) {
 		});
 		return;
 	}
-	const { rid } = Meteor.call('createDirectMessage', targetUsername);
+	const { rid } = Meteor.call('createDirectMessage', [targetUsername]);
 	const msgObject = {
 		_id: Random.id(),
 		rid,

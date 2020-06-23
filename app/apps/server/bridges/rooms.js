@@ -38,7 +38,7 @@ export class AppRoomBridge {
 			delete extraData.customFields;
 			let info;
 			if (room.type === RoomType.DIRECT_MESSAGE) {
-				info = Meteor.call(method, ...members);
+				info = Meteor.call(method, members);
 			} else {
 				info = Meteor.call(method, rcRoom.name, members, rcRoom.ro, rcRoom.customFields, extraData);
 			}

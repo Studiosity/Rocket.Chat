@@ -66,7 +66,7 @@ Template.CreateDirectMessage.events({
 		event.preventDefault();
 		const users = instance.selectedUsers.get().map(({ username }) => username).filter((value, index, self) => self.indexOf(value) === index);
 
-		const result = await call('createDirectMessage', ...users);
+		const result = await call('createDirectMessage', users);
 
 		if (instance.data.onCreate) {
 			instance.data.onCreate(result);
